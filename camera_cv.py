@@ -22,8 +22,13 @@ def nn_detect(image):
     results = model(image)
 
     #get name of first result, return it
-      
-    pass
+    results.print()
+
+    res_pd = results.pandas().xyxy[0]
+
+    toret = 'None' if res_pd.name.empty else res_pd.name[0]
+
+    return toret
 
 def edge_size(mask):
     #edge detect, then dilate edges
@@ -99,9 +104,11 @@ def run_loop():
         ret, frame = cap.read()
         mask = mask_make(frame)
 
+        '''
         cv2.imshow('mask', mask)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+        '''
 
         #detect blobs
         blobs = detector.detect(mask)
