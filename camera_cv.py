@@ -15,6 +15,8 @@ params.filterByCircularity = False
 params.minArea = 1500
 params.maxArea = 100000000000000000 #extremely large number, no max cap
 
+px_to_in = 127
+
 model = torch.hub.load('ultralytics/yolov5', 'custom',  path = 'best.pt')
 
 def nn_detect(image):
@@ -50,7 +52,6 @@ def edge_size(mask):
             break
 
     diff = r_pix - l_pix #pixel difference
-    px_to_in = 127 
 
     wid_in = diff/px_to_in #divide by factor to get inches
 
@@ -120,10 +121,13 @@ def run_loop():
 
             #classify image
             labels = nn_detect(frame)
+            wid = None
 
             #depending on classification, use edges to determine size of object
             if labels == 'slab':
-                edge_size(mask)
+                wid = edge_size(mask)
+
+            #cook(labels, wid)
 
 if __name__ == '__main__':
     run_loop()
