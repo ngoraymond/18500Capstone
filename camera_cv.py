@@ -15,7 +15,9 @@ params.filterByCircularity = False
 params.minArea = 1500
 params.maxArea = 100000000000000000 #extremely large number, no max cap
 
-px_to_in = 127
+px_to_in = 50
+
+acceptable_labels = {'Slab', 'Round', 'Blob'}
 
 model = torch.hub.load('ultralytics/yolov5', 'custom',  path = 'best.pt')
 
@@ -23,19 +25,30 @@ def nn_detect(image):
     #run
     results = model(image)
 
-    #get name of first result, return it
-    results.print()
+    #results.print()
 
     res_pd = results.pandas().xyxy[0]
 
-    toret = 'None' if res_pd.name.empty else res_pd.name[0]
+    #print(res_pd)
+
+    toret = 'None' 
+
+    #get the most popular prediction
+    toret_w = 0.
+
+    for idx, row in res_pd.iterrows():
+        if row['name'] in acceptable_labels:
+            if row['confidence'] > toret_w:
+                toret_w = row['confidence']
+                toret = row['name']
 
     return toret
 
-def edge_size(mask):
+def edge_size(frame):
     #edge detect, then dilate edges
+    mask = mask_make(frame, dilations=4)
     edges = cv2.Canny(mask, 0, 255)
-    h, w = mask.shape[:2]
+    h, w = edges.shape[:2]
 
     mid_row = edges[h//2,:]
 
@@ -60,8 +73,10 @@ def edge_size(mask):
     else:
         print(f'{wid_in:.2f} inches')
 
+    return wid_in
 
-def mask_make(frame): #create the black and white mask
+
+def mask_make(frame, dilations=3): #create the black and white mask
     #convert image of floating food into HSV, to threshold
 
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -124,10 +139,11 @@ def run_loop():
             wid = None
 
             #depending on classification, use edges to determine size of object
-            if labels == 'slab':
-                wid = edge_size(mask)
+            if labels == 'Slab':
+                wid = edge_size(frame)
 
-            #cook(labels, wid)
+            #if labels in acceptable_labels:
+                #cook(labels, wid)
 
 if __name__ == '__main__':
     run_loop()
