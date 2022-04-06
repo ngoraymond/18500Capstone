@@ -15,7 +15,7 @@ params.filterByCircularity = False
 params.minArea = 1500
 params.maxArea = 100000000000000000 #extremely large number, no max cap
 
-px_to_in = 50
+px_to_in = 55
 
 acceptable_labels = {'Slab', 'Round', 'Blob'}
 
@@ -71,7 +71,7 @@ def edge_size(frame):
     if l_pix < 0 or r_pix < 0: #something went wrong
         print("No edge detected")
     else:
-        print(f'{wid_in:.2f} inches')
+        print(f'Width: {wid_in:.2f} inches')
 
     return wid_in
 
@@ -130,7 +130,8 @@ def run_loop():
         blobs = detector.detect(mask)
 
         if len(blobs) > 0:
-            print(len(blobs), " objects detected")
+            #print(len(blobs), " objects detected")
+            print('object(s) detected')
 
             #other work here, sending instructions to robot arm
 
