@@ -19,7 +19,7 @@ px_to_in = 55
 
 acceptable_labels = {'Slab', 'Round', 'Blob'}
 
-model = torch.hub.load('ultralytics/yolov5', 'custom',  path = 'best.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom',  path = 'best_v1.pt')
 
 def nn_detect(image):
     #run
