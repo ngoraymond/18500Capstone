@@ -15,6 +15,13 @@ params.filterByCircularity = False
 params.minArea = 1500
 params.maxArea = 100000000000000000 #extremely large number, no max cap
 
+detector = cv2.SimpleBlobDetector_create(params)
+cap = cv2.VideoCapture(0)
+
+#Shared labels
+ui_cook_t = 0
+ui_wid = 0
+
 px_to_in = 55
 
 acceptable_labels = {'Slab', 'Round', 'Blob'}
@@ -113,38 +120,39 @@ def mask_make(frame, dilations=3): #create the black and white mask
     
     return mask
 
+def run_cv():
+    ret, frame = cap.read()
+    mask = mask_make(frame)
+
+    '''
+    cv2.imshow('mask', mask)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+    '''
+
+    #detect blobs
+    blobs = detector.detect(mask)
+
+    if len(blobs) > 0:
+        #print(len(blobs), " objects detected")
+        print('object(s) detected')
+
+        #other work here, sending instructions to robot arm
+
+        #classify image
+        labels = nn_detect(frame)
+        wid = None
+
+        #depending on classification, use edges to determine size of object
+        if labels == 'Slab':
+            wid = edge_size(frame)
+
+        #if labels in acceptable_labels:
+            #cook_t = Cooking_Time(labels, wid)
+
 def run_loop():
-    cap = cv2.VideoCapture(0)
-    detector = cv2.SimpleBlobDetector_create(params)
     while True:
-        ret, frame = cap.read()
-        mask = mask_make(frame)
-
-        '''
-        cv2.imshow('mask', mask)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-        '''
-
-        #detect blobs
-        blobs = detector.detect(mask)
-
-        if len(blobs) > 0:
-            #print(len(blobs), " objects detected")
-            print('object(s) detected')
-
-            #other work here, sending instructions to robot arm
-
-            #classify image
-            labels = nn_detect(frame)
-            wid = None
-
-            #depending on classification, use edges to determine size of object
-            if labels == 'Slab':
-                wid = edge_size(frame)
-
-            #if labels in acceptable_labels:
-                #cook(labels, wid)
+        run_cv()
 
 if __name__ == '__main__':
     run_loop()
