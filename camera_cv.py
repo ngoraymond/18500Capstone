@@ -5,6 +5,8 @@ import os
 import torch
 import pandas as pd
 
+from Cooking_Time import Get_Time
+
 #parameters for blob detection
 params = cv2.SimpleBlobDetector_Params()
 params.filterByArea = True
@@ -147,8 +149,8 @@ def run_cv():
         if labels == 'Slab':
             wid = edge_size(frame)
 
-        #if labels in acceptable_labels:
-            #cook_t = Cooking_Time(labels, wid)
+        if labels in acceptable_labels:
+            cook_t = Get_Time(labels, wid)
 
 def run_loop():
     while True:
