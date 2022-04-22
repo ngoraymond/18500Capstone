@@ -156,6 +156,8 @@ def run_cv():
             cook_t = Get_Time(labels, wid)
             ui_cook_t = cook_t
 
+    return ui_cook_t, ui_wid
+
 def run_loop():
     while True:
         run_cv()
