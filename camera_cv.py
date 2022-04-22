@@ -82,7 +82,7 @@ def edge_size(frame):
     else:
         print(f'Width: {wid_in:.2f} inches')
 
-    return wid_in
+    return str(wid_in)
 
 
 def mask_make(frame, dilations=3): #create the black and white mask

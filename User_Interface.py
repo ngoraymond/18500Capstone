@@ -136,7 +136,7 @@ def main():
             # frame = cv2.resize(frameOrig, frameSize)
             # frame=np.full((480,640),255)
 
-            run_cv()
+            time_to_cook, detected_thickness = run_cv()
 
             imgbytes = cv2.imencode(".png", frame)[1].tobytes()
             # window["graph"].update(data=imgbytes)
