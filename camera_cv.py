@@ -148,9 +148,13 @@ def run_cv():
         #depending on classification, use edges to determine size of object
         if labels == 'Slab':
             wid = edge_size(frame)
+            ui_wid = wid
+        elif labels in acceptable_labels:
+            ui_wid = "N/A"
 
         if labels in acceptable_labels:
             cook_t = Get_Time(labels, wid)
+            ui_cook_t = cook_t
 
 def run_loop():
     while True:

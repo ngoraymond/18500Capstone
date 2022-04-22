@@ -4,7 +4,7 @@ import PySimpleGUI as sg
 import cv2
 import numpy as np
 
-from camera_cv import run_cv
+from camera_cv import run_cv, ui_wid, ui_cook_t
 
 def set_size(element, size):
     # From https://github.com/PySimpleGUI/PySimpleGUI/issues/4407
