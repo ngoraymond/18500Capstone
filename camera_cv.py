@@ -163,4 +163,7 @@ def run_loop():
         run_cv()
 
 if __name__ == '__main__':
+    #cuda check
+    print(torch.version.cuda)
+    print(torch.cuda.is_available())
     run_loop()
