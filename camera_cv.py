@@ -123,6 +123,8 @@ def mask_make(frame, dilations=3): #create the black and white mask
     return mask
 
 def run_cv():
+    global ui_cook_t
+    global ui_wid
     ret, frame = cap.read()
     mask = mask_make(frame)
 
