@@ -102,7 +102,7 @@ def mask_make(frame, dilations=3): #create the black and white mask
 
     mask = (mask0+mask1)
 
-    mask = cv2.dilate(mask, None, iterations=3) #dilate to make floodfill more effective
+    mask = cv2.dilate(mask, None, iterations=dilations) #dilate to make floodfill more effective
 
     mask_flood = mask.copy()
 
@@ -129,7 +129,7 @@ def run_cv():
     '''
     cv2.imshow('mask', mask)
     if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        return
     '''
 
     #detect blobs
