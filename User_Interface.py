@@ -101,7 +101,7 @@ def main():
     # set_size(window['cam_feed_page'], (window.size))
     # sg.Window(title="KBBQ for KBBeginners", layout=[[]], margins=(341.5, 256)).read()
 
-    video = cv2.VideoCapture(0) #change to 1 for external camera
+    video = cv2.VideoCapture(1) #change to 1 for external camera
     # window.bind('<Configure>',"resize")
 
     while True:
