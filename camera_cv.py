@@ -4,6 +4,7 @@ import os
 
 import torch
 import pandas as pd
+import time
 
 from Cooking_Time import Get_Time
 
@@ -34,7 +35,7 @@ def nn_detect(image):
     #run
     results = model(image)
 
-    results.print()
+    #results.print()
 
     res_pd = results.pandas().xyxy[0]
 
@@ -138,6 +139,8 @@ def mask_make(frame, dilations=3): #create the black and white mask
 def run_cv():
     global ui_cook_t
     global ui_wid
+
+    t1 = time.perf_counter()
     ret, frame = cap.read()
     mask = mask_make(frame)
 
@@ -149,6 +152,7 @@ def run_cv():
 
     #detect blobs
     blobs = detector.detect(mask)
+    print("Time to detect blobs:", time.perf_counter() - t1)
 
     if len(blobs) > 0:
         #print(len(blobs), " objects detected")
