@@ -80,7 +80,7 @@ def edge_size(frame):
     if l_pix < 0 or r_pix < 0: #something went wrong
         print("No edge detected")
     else:
-        print(f'Width: {wid_in:.2f} inches')
+        print(f'Width: {wid_in:.4f} inches')
 
     return str(wid_in)
 
