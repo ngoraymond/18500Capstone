@@ -18,7 +18,7 @@ params.minArea = 1500
 params.maxArea = 100000000000000000 #extremely large number, no max cap
 
 detector = cv2.SimpleBlobDetector_create(params)
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 #Shared labels
 ui_cook_t = 0
@@ -34,7 +34,7 @@ def nn_detect(image):
     #run
     results = model(image)
 
-    #results.print()
+    results.print()
 
     res_pd = results.pandas().xyxy[0]
 
@@ -61,6 +61,18 @@ def edge_size(frame):
 
     mid_row = edges[h//2,:]
 
+    '''
+    #contours 
+    contours, _ = cv2.findContours(cv2.Canny(frame, 30,255), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(frame, contours, -1, (0, 0, 255), 3)
+
+    
+    cv2.imshow('edges', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        return
+    ''' 
+    
+
     #find the rightmost pixel left of center and the leftmost pixel right of center
     l_pix = -1
     r_pix = -1
@@ -79,10 +91,11 @@ def edge_size(frame):
 
     if l_pix < 0 or r_pix < 0: #something went wrong
         print("No edge detected")
+        return None
     else:
         print(f'Width: {wid_in:.4f} inches')
 
-    return str(wid_in)
+    return wid_in
 
 
 def mask_make(frame, dilations=3): #create the black and white mask
@@ -150,7 +163,9 @@ def run_cv():
         #depending on classification, use edges to determine size of object
         if labels == 'Slab':
             wid = edge_size(frame)
-            ui_wid = wid
+            if wid == None:
+                return ui_cook_t, ui_wid
+            ui_wid = str(wid)
         elif labels in acceptable_labels:
             ui_wid = "N/A"
 
