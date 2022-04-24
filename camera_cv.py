@@ -21,6 +21,9 @@ params.maxArea = 100000000000000000 #extremely large number, no max cap
 detector = cv2.SimpleBlobDetector_create(params)
 cap = cv2.VideoCapture(1)
 
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
 #Shared labels
 ui_cook_t = 0
 ui_wid = 0
@@ -141,6 +144,8 @@ def run_cv():
     global ui_wid
 
     ret, frame = cap.read()
+
+    t1 = time.perf_counter()
     mask = mask_make(frame)
 
     '''
@@ -151,6 +156,7 @@ def run_cv():
 
     #detect blobs
     blobs = detector.detect(mask)
+    print('Time to detect blobs:', time.perf_counter() - t1)
 
     if len(blobs) > 0:
         #print(len(blobs), " objects detected")
