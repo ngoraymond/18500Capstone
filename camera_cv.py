@@ -170,6 +170,7 @@ def run_cv():
 
         #depending on classification, use edges to determine size of object
         if labels == 'Slab':
+            ret, frame = cap.read()
             wid = edge_size(frame)
             if wid == None:
                 return ui_cook_t, ui_wid
