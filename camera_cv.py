@@ -141,11 +141,9 @@ def mask_make(frame, dilations=3): #create the black and white mask
 
 def run_cv():
     global ui_cook_t
-    global ui_wid
 
     ret, frame = cap.read()
 
-    t1 = time.perf_counter()
     mask = mask_make(frame)
 
     '''
@@ -154,9 +152,11 @@ def run_cv():
         return
     '''
 
+    cook_t = None
+    labels = None
+
     #detect blobs
     blobs = detector.detect(mask)
-    print('Time to detect blobs:', time.perf_counter() - t1)
 
     if len(blobs) > 0:
         #print(len(blobs), " objects detected")
@@ -166,23 +166,19 @@ def run_cv():
 
         #classify image
         labels = nn_detect(frame)
-        wid = None
 
-        #depending on classification, use edges to determine size of object
-        if labels == 'Slab':
-            ret, frame = cap.read()
-            wid = edge_size(frame)
-            if wid == None:
-                return ui_cook_t, ui_wid
-            ui_wid = str(wid)
-        elif labels in acceptable_labels:
-            ui_wid = "N/A"
-
-        if labels in acceptable_labels:
-            cook_t = Get_Time(labels, wid)
+        if labels in acceptable_labels and labels != 'Slab':
+            cook_t = Get_Time(labels, None)
             ui_cook_t = cook_t
 
-    return ui_cook_t, ui_wid
+    return labels, cook_t
+
+def slab_time():
+    ret, frame = cap.read()
+    wid = edge_size(frame)
+    if wid == None:
+        return Get_Time('Blob', wid)
+    return Get_Time('Slab', wid)
 
 def run_loop():
     while True:
