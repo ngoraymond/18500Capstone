@@ -19,7 +19,7 @@ params.minArea = 1500
 params.maxArea = 100000000000000000 #extremely large number, no max cap
 
 detector = cv2.SimpleBlobDetector_create(params)
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
